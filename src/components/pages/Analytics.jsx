@@ -25,7 +25,7 @@ const Analytics = () => {
       const data = await analyticsService.getOverallAnalytics();
       setAnalytics(data);
     } catch (err) {
-      setError('Failed to load analytics data');
+      setError('Failed to load analytics data getOverallAnalytics');
     } finally {
       setLoading(false);
     }
