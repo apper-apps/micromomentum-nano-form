@@ -1,0 +1,48 @@
+{
+  "goalData": [
+    {
+      "Id": 1,
+      "title": "Learn Guitar",
+      "description": "Master basic guitar chords and play my favorite songs",
+      "targetDate": "2024-06-15",
+      "category": "creative",
+      "priority": "high",
+      "status": "active",
+      "createdAt": "2024-01-10T10:00:00Z",
+      "aiAnalysis": "To master guitar, I've broken this into daily micro-habits:\n\n1. **Finger Warm-up** (5 minutes)\n   - Practice basic finger stretches\n   - Chromatic exercises for dexterity\n   - Build muscle memory\n\n2. **Chord Practice** (15 minutes)\n   - Focus on 2-3 chords per week\n   - Practice smooth transitions\n   - Use a metronome for timing\n\n3. **Song Application** (10 minutes)\n   - Apply learned chords to simple songs\n   - Practice strumming patterns\n   - Record progress weekly\n\n4. **Theory Learning** (5 minutes)\n   - Learn one music theory concept\n   - Understanding chord progressions\n   - Build foundation knowledge\n\nThese habits focus on consistency over intensity, building skill gradually."
+    },
+    {
+      "Id": 2,
+      "title": "Start a Side Business",
+      "description": "Launch an online business selling handmade crafts",
+      "targetDate": "2024-08-30",
+      "category": "career",
+      "priority": "high",
+      "status": "active",
+      "createdAt": "2024-01-20T14:30:00Z",
+      "aiAnalysis": "Building a side business requires systematic daily actions:\n\n1. **Product Development** (20 minutes)\n   - Create one new craft item daily\n   - Document creation process\n   - Build inventory consistently\n\n2. **Market Research** (10 minutes)\n   - Study competitor pricing\n   - Identify target customer needs\n   - Monitor market trends\n\n3. **Brand Building** (15 minutes)\n   - Create social media content\n   - Engage with potential customers\n   - Build online presence\n\n4. **Business Planning** (10 minutes)\n   - Track expenses and revenue\n   - Plan next day's priorities\n   - Review and adjust strategy\n\nSmall daily actions compound into significant business growth."
+    },
+    {
+      "Id": 3,
+      "title": "Run a Marathon",
+      "description": "Complete a full 26.2-mile marathon in under 4 hours",
+      "targetDate": "2024-10-15",
+      "category": "health",
+      "priority": "medium",
+      "status": "paused",
+      "createdAt": "2024-02-01T08:00:00Z",
+      "aiAnalysis": "Marathon training requires progressive daily habits:\n\n1. **Morning Run** (30-45 minutes)\n   - Follow structured training plan\n   - Build endurance gradually\n   - Track pace and distance\n\n2. **Strength Training** (20 minutes)\n   - Core strengthening exercises\n   - Leg and glute workouts\n   - Injury prevention focus\n\n3. **Nutrition Tracking** (5 minutes)\n   - Log daily food intake\n   - Monitor hydration levels\n   - Plan race-day nutrition\n\n4. **Recovery Routine** (10 minutes)\n   - Stretching and foam rolling\n   - Sleep quality monitoring\n   - Rest day activities\n\nConsistent training with proper recovery leads to marathon success."
+    },
+    {
+      "Id": 4,
+      "title": "Master Spanish",
+      "description": "Achieve conversational fluency in Spanish",
+      "targetDate": "2024-12-20",
+      "category": "education",
+      "priority": "medium",
+      "status": "completed",
+      "createdAt": "2023-11-15T16:20:00Z",
+      "aiAnalysis": "Language mastery through daily immersion habits:\n\n1. **Vocabulary Building** (15 minutes)\n   - Learn 10 new words daily\n   - Use spaced repetition system\n   - Practice word associations\n\n2. **Speaking Practice** (10 minutes)\n   - Record daily voice notes\n   - Practice pronunciation\n   - Simulate conversations\n\n3. **Listening Comprehension** (20 minutes)\n   - Watch Spanish content\n   - Listen to podcasts/music\n   - Improve ear training\n\n4. **Grammar Study** (10 minutes)\n   - Learn one grammar rule\n   - Practice with exercises\n   - Apply in context\n\nDaily exposure and practice create natural language acquisition."
+    }
+  ]
+}

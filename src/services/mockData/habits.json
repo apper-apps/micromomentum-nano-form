@@ -1,0 +1,157 @@
+{
+  "habitData": [
+    {
+      "Id": 1,
+      "goalId": "1",
+      "title": "Morning Finger Warm-up",
+      "frequency": "daily",
+      "timeOfDay": "morning",
+      "currentStreak": 15,
+      "longestStreak": 23,
+      "completions": [
+        "2024-01-10", "2024-01-11", "2024-01-12", "2024-01-13", "2024-01-14",
+        "2024-01-15", "2024-01-16", "2024-01-17", "2024-01-18", "2024-01-19",
+        "2024-01-20", "2024-01-21", "2024-01-22", "2024-01-23", "2024-01-24"
+      ]
+    },
+    {
+      "Id": 2,
+      "goalId": "1",
+      "title": "Chord Practice Session",
+      "frequency": "daily",
+      "timeOfDay": "afternoon",
+      "currentStreak": 12,
+      "longestStreak": 18,
+      "completions": [
+        "2024-01-13", "2024-01-14", "2024-01-15", "2024-01-16", "2024-01-17",
+        "2024-01-18", "2024-01-19", "2024-01-20", "2024-01-21", "2024-01-22",
+        "2024-01-23", "2024-01-24"
+      ]
+    },
+    {
+      "Id": 3,
+      "goalId": "1",
+      "title": "Song Application Practice",
+      "frequency": "daily",
+      "timeOfDay": "evening",
+      "currentStreak": 8,
+      "longestStreak": 15,
+      "completions": [
+        "2024-01-17", "2024-01-18", "2024-01-19", "2024-01-20", "2024-01-21",
+        "2024-01-22", "2024-01-23", "2024-01-24"
+      ]
+    },
+    {
+      "Id": 4,
+      "goalId": "1",
+      "title": "Music Theory Study",
+      "frequency": "daily",
+      "timeOfDay": "anytime",
+      "currentStreak": 5,
+      "longestStreak": 10,
+      "completions": [
+        "2024-01-20", "2024-01-21", "2024-01-22", "2024-01-23", "2024-01-24"
+      ]
+    },
+    {
+      "Id": 5,
+      "goalId": "2",
+      "title": "Create New Craft Item",
+      "frequency": "daily",
+      "timeOfDay": "morning",
+      "currentStreak": 7,
+      "longestStreak": 12,
+      "completions": [
+        "2024-01-18", "2024-01-19", "2024-01-20", "2024-01-21", "2024-01-22",
+        "2024-01-23", "2024-01-24"
+      ]
+    },
+    {
+      "Id": 6,
+      "goalId": "2",
+      "title": "Market Research",
+      "frequency": "daily",
+      "timeOfDay": "afternoon",
+      "currentStreak": 6,
+      "longestStreak": 9,
+      "completions": [
+        "2024-01-19", "2024-01-20", "2024-01-21", "2024-01-22", "2024-01-23",
+        "2024-01-24"
+      ]
+    },
+    {
+      "Id": 7,
+      "goalId": "2",
+      "title": "Social Media Content",
+      "frequency": "daily",
+      "timeOfDay": "evening",
+      "currentStreak": 4,
+      "longestStreak": 8,
+      "completions": [
+        "2024-01-21", "2024-01-22", "2024-01-23", "2024-01-24"
+      ]
+    },
+    {
+      "Id": 8,
+      "goalId": "2",
+      "title": "Business Planning",
+      "frequency": "daily",
+      "timeOfDay": "evening",
+      "currentStreak": 3,
+      "longestStreak": 6,
+      "completions": [
+        "2024-01-22", "2024-01-23", "2024-01-24"
+      ]
+    },
+    {
+      "Id": 9,
+      "goalId": "3",
+      "title": "Morning Run",
+      "frequency": "daily",
+      "timeOfDay": "morning",
+      "currentStreak": 0,
+      "longestStreak": 21,
+      "completions": [
+        "2024-01-01", "2024-01-02", "2024-01-03", "2024-01-04", "2024-01-05",
+        "2024-01-06", "2024-01-07", "2024-01-08", "2024-01-09", "2024-01-10",
+        "2024-01-11", "2024-01-12", "2024-01-13", "2024-01-14", "2024-01-15",
+        "2024-01-16", "2024-01-17", "2024-01-18", "2024-01-19", "2024-01-20",
+        "2024-01-21"
+      ]
+    },
+    {
+      "Id": 10,
+      "goalId": "3",
+      "title": "Strength Training",
+      "frequency": "daily",
+      "timeOfDay": "afternoon",
+      "currentStreak": 0,
+      "longestStreak": 14,
+      "completions": [
+        "2024-01-01", "2024-01-03", "2024-01-05", "2024-01-07", "2024-01-09",
+        "2024-01-11", "2024-01-13", "2024-01-15", "2024-01-17", "2024-01-19",
+        "2024-01-21", "2024-01-23", "2024-01-25", "2024-01-27"
+      ]
+    },
+    {
+      "Id": 11,
+      "goalId": "4",
+      "title": "Daily Vocabulary",
+      "frequency": "daily",
+      "timeOfDay": "morning",
+      "currentStreak": 45,
+      "longestStreak": 45,
+      "completions": []
+    },
+    {
+      "Id": 12,
+      "goalId": "4",
+      "title": "Speaking Practice",
+      "frequency": "daily",
+      "timeOfDay": "afternoon",
+      "currentStreak": 42,
+      "longestStreak": 42,
+      "completions": []
+    }
+  ]
+}

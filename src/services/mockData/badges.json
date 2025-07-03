@@ -1,0 +1,195 @@
+{
+  "badgeData": [
+    {
+      "Id": 1,
+      "type": "streak",
+      "title": "Week Warrior",
+      "description": "7 day streak",
+      "icon": "Flame",
+      "earned": true,
+      "earnedAt": "2024-01-17T10:00:00Z",
+      "requirement": {
+        "type": "streak",
+        "days": 7
+      }
+    },
+    {
+      "Id": 2,
+      "type": "streak",
+      "title": "Consistency Champion",
+      "description": "14 day streak",
+      "icon": "Award",
+      "earned": true,
+      "earnedAt": "2024-01-24T10:00:00Z",
+      "requirement": {
+        "type": "streak",
+        "days": 14
+      }
+    },
+    {
+      "Id": 3,
+      "type": "streak",
+      "title": "Momentum Master",
+      "description": "30 day streak",
+      "icon": "Trophy",
+      "earned": false,
+      "requirement": {
+        "type": "streak",
+        "days": 30
+      }
+    },
+    {
+      "Id": 4,
+      "type": "streak",
+      "title": "Habit Hero",
+      "description": "60 day streak",
+      "icon": "Crown",
+      "earned": false,
+      "requirement": {
+        "type": "streak",
+        "days": 60
+      }
+    },
+    {
+      "Id": 5,
+      "type": "streak",
+      "title": "Legend",
+      "description": "90 day streak",
+      "icon": "Star",
+      "earned": false,
+      "requirement": {
+        "type": "streak",
+        "days": 90
+      }
+    },
+    {
+      "Id": 6,
+      "type": "milestone",
+      "title": "First Steps",
+      "description": "Complete first habit",
+      "icon": "Play",
+      "earned": true,
+      "earnedAt": "2024-01-10T10:00:00Z",
+      "requirement": {
+        "type": "completion",
+        "count": 1
+      }
+    },
+    {
+      "Id": 7,
+      "type": "milestone",
+      "title": "Getting Started",
+      "description": "Complete 10 habits",
+      "icon": "Target",
+      "earned": true,
+      "earnedAt": "2024-01-15T10:00:00Z",
+      "requirement": {
+        "type": "completion",
+        "count": 10
+      }
+    },
+    {
+      "Id": 8,
+      "type": "milestone",
+      "title": "Habit Builder",
+      "description": "Complete 50 habits",
+      "icon": "Zap",
+      "earned": true,
+      "earnedAt": "2024-01-22T10:00:00Z",
+      "requirement": {
+        "type": "completion",
+        "count": 50
+      }
+    },
+    {
+      "Id": 9,
+      "type": "milestone",
+      "title": "Century Club",
+      "description": "Complete 100 habits",
+      "icon": "Medal",
+      "earned": false,
+      "requirement": {
+        "type": "completion",
+        "count": 100
+      }
+    },
+    {
+      "Id": 10,
+      "type": "milestone",
+      "title": "Habit Master",
+      "description": "Complete 500 habits",
+      "icon": "Diamond",
+      "earned": false,
+      "requirement": {
+        "type": "completion",
+        "count": 500
+      }
+    },
+    {
+      "Id": 11,
+      "type": "special",
+      "title": "Early Bird",
+      "description": "Complete 7 morning habits",
+      "icon": "Sunrise",
+      "earned": true,
+      "earnedAt": "2024-01-18T10:00:00Z",
+      "requirement": {
+        "type": "timeOfDay",
+        "period": "morning",
+        "count": 7
+      }
+    },
+    {
+      "Id": 12,
+      "type": "special",
+      "title": "Night Owl",
+      "description": "Complete 7 evening habits",
+      "icon": "Moon",
+      "earned": true,
+      "earnedAt": "2024-01-20T10:00:00Z",
+      "requirement": {
+        "type": "timeOfDay",
+        "period": "evening",
+        "count": 7
+      }
+    },
+    {
+      "Id": 13,
+      "type": "special",
+      "title": "Goal Setter",
+      "description": "Create your first goal",
+      "icon": "Bullseye",
+      "earned": true,
+      "earnedAt": "2024-01-10T10:00:00Z",
+      "requirement": {
+        "type": "goal",
+        "count": 1
+      }
+    },
+    {
+      "Id": 14,
+      "type": "special",
+      "title": "Perfectionist",
+      "description": "Complete all habits in a day",
+      "icon": "CheckCircle",
+      "earned": true,
+      "earnedAt": "2024-01-16T10:00:00Z",
+      "requirement": {
+        "type": "perfectDay",
+        "count": 1
+      }
+    },
+    {
+      "Id": 15,
+      "type": "special",
+      "title": "Comeback Kid",
+      "description": "Resume after breaking a streak",
+      "icon": "RotateCcw",
+      "earned": false,
+      "requirement": {
+        "type": "comeback",
+        "count": 1
+      }
+    }
+  ]
+}
