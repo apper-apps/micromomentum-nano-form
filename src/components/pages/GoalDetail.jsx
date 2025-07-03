@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
+import Chart from 'react-apexcharts';
 import ApperIcon from '@/components/ApperIcon';
 import Card from '@/components/atoms/Card';
 import Button from '@/components/atoms/Button';
@@ -11,7 +12,8 @@ import Loading from '@/components/ui/Loading';
 import Error from '@/components/ui/Error';
 import { goalService } from '@/services/api/goalService';
 import { habitService } from '@/services/api/habitService';
-import { formatDistanceToNow } from 'date-fns';
+import { progressService } from '@/services/api/progressService';
+import { formatDistanceToNow, differenceInDays, format } from 'date-fns';
 
 const GoalDetail = () => {
   const { id } = useParams();
@@ -20,12 +22,15 @@ const GoalDetail = () => {
   const [habits, setHabits] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [progressViewType, setProgressViewType] = useState('circle');
+  const [progressHistory, setProgressHistory] = useState([]);
+  const [progressLoading, setProgressLoading] = useState(false);
 
   useEffect(() => {
     loadGoalData();
   }, [id]);
 
-  const loadGoalData = async () => {
+const loadGoalData = async () => {
     try {
       setLoading(true);
       setError('');
@@ -35,10 +40,44 @@ const GoalDetail = () => {
       ]);
       setGoal(goalData);
       setHabits(habitData);
+      
+      // Load progress history after goal data is loaded
+      if (goalData) {
+        loadProgressHistory(goalData);
+      }
     } catch (err) {
       setError('Failed to load goal details');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadProgressHistory = async (goalData) => {
+    try {
+      setProgressLoading(true);
+      const createdDate = new Date(goalData.createdAt);
+      const targetDate = new Date(goalData.targetDate);
+      const totalDays = differenceInDays(targetDate, createdDate);
+      const daysPassed = differenceInDays(new Date(), createdDate);
+      
+      // Generate mock progress data showing journey over time
+      const progressData = [];
+      for (let i = 0; i <= Math.min(daysPassed, totalDays); i += Math.ceil(totalDays / 20)) {
+        const date = new Date(createdDate);
+        date.setDate(date.getDate() + i);
+        const progress = Math.min((i / totalDays) * calculateProgress(), calculateProgress());
+        progressData.push({
+          date: format(date, 'MMM dd'),
+          progress: Math.round(progress + Math.random() * 10), // Add some variation
+          habits: Math.floor(habits.length * (progress / 100))
+        });
+      }
+      
+      setProgressHistory(progressData);
+    } catch (err) {
+      console.error('Failed to load progress history:', err);
+    } finally {
+      setProgressLoading(false);
     }
   };
 
@@ -82,11 +121,93 @@ const GoalDetail = () => {
     return icons[status] || 'Circle';
   };
 
-  const calculateProgress = () => {
+const calculateProgress = () => {
     const totalHabits = habits.length;
     const completedHabits = habits.filter(habit => habit.currentStreak > 0).length;
     return totalHabits > 0 ? Math.round((completedHabits / totalHabits) * 100) : 0;
   };
+
+  const calculateTimeProgress = () => {
+    if (!goal) return 0;
+    const createdDate = new Date(goal.createdAt);
+    const targetDate = new Date(goal.targetDate);
+    const currentDate = new Date();
+    const totalDays = differenceInDays(targetDate, createdDate);
+    const daysPassed = differenceInDays(currentDate, createdDate);
+    return totalDays > 0 ? Math.round((daysPassed / totalDays) * 100) : 0;
+  };
+
+  const getProgressChartOptions = () => ({
+    chart: {
+      type: 'bar',
+      height: 350,
+      toolbar: { show: false },
+      background: 'transparent',
+      animations: {
+        enabled: true,
+        easing: 'easeinout',
+        speed: 800
+      }
+    },
+    plotOptions: {
+      bar: {
+        borderRadius: 8,
+        columnWidth: '60%',
+        distributed: false
+      }
+    },
+    dataLabels: { enabled: false },
+    stroke: {
+      width: 0
+    },
+    xaxis: {
+      categories: progressHistory.map(item => item.date),
+      labels: {
+        style: {
+          colors: '#6B7280',
+          fontSize: '12px'
+        }
+      },
+      axisBorder: { show: false },
+      axisTicks: { show: false }
+    },
+    yaxis: {
+      labels: {
+        style: {
+          colors: '#6B7280',
+          fontSize: '12px'
+        },
+        formatter: (val) => `${val}%`
+      },
+      max: 100
+    },
+    fill: {
+      type: 'gradient',
+      gradient: {
+        shade: 'light',
+        type: 'vertical',
+        shadeIntensity: 0.25,
+        gradientToColors: ['#EC4899'],
+        inverseColors: false,
+        opacityFrom: 0.85,
+        opacityTo: 0.85,
+        stops: [50, 0, 100]
+      }
+    },
+    colors: ['#6B46C1'],
+    grid: {
+      borderColor: '#F3F4F6',
+      strokeDashArray: 4,
+      xaxis: { lines: { show: false } },
+      yaxis: { lines: { show: true } }
+    },
+    tooltip: {
+      theme: 'dark',
+      y: {
+        formatter: (val) => `${val}% Complete`
+      }
+    }
+  });
 
   if (loading) return <Loading />;
   if (error) return <Error message={error} onRetry={loadGoalData} />;
@@ -174,6 +295,147 @@ const GoalDetail = () => {
               </div>
             </div>
           </Card>
+</motion.div>
+
+        {/* Progress Journey */}
+        <motion.div
+          className="mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+        >
+          <Card>
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+                  <ApperIcon name="TrendingUp" size={20} className="text-white" />
+                </div>
+                <h2 className="text-xl font-display font-bold text-gray-800">
+                  Progress Journey
+                </h2>
+              </div>
+              
+              <div className="flex items-center space-x-2">
+                <Button
+                  variant={progressViewType === 'circle' ? 'primary' : 'outline'}
+                  size="sm"
+                  onClick={() => setProgressViewType('circle')}
+                  className="flex items-center space-x-2"
+                >
+                  <ApperIcon name="Circle" size={14} />
+                  <span className="hidden sm:inline">Circle</span>
+                </Button>
+                <Button
+                  variant={progressViewType === 'chart' ? 'primary' : 'outline'}
+                  size="sm"
+                  onClick={() => setProgressViewType('chart')}
+                  className="flex items-center space-x-2"
+                >
+                  <ApperIcon name="BarChart3" size={14} />
+                  <span className="hidden sm:inline">Chart</span>
+                </Button>
+              </div>
+            </div>
+
+            {progressViewType === 'circle' ? (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div className="flex flex-col items-center justify-center space-y-6">
+                  <div className="text-center">
+                    <h3 className="text-lg font-display font-semibold text-gray-800 mb-2">
+                      Goal Completion
+                    </h3>
+                    <ProgressRing progress={calculateProgress()} size={140}>
+                      <div className="text-center">
+                        <div className="text-3xl font-bold gradient-text">
+                          {calculateProgress()}%
+                        </div>
+                        <div className="text-sm text-gray-500">Complete</div>
+                      </div>
+                    </ProgressRing>
+                  </div>
+                </div>
+                
+                <div className="flex flex-col items-center justify-center space-y-6">
+                  <div className="text-center">
+                    <h3 className="text-lg font-display font-semibold text-gray-800 mb-2">
+                      Time Progress
+                    </h3>
+                    <ProgressRing progress={calculateTimeProgress()} size={140} strokeColor="#F59E0B">
+                      <div className="text-center">
+                        <div className="text-3xl font-bold text-orange-500">
+                          {calculateTimeProgress()}%
+                        </div>
+                        <div className="text-sm text-gray-500">Time Elapsed</div>
+                      </div>
+                    </ProgressRing>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="text-center">
+                  <h3 className="text-lg font-display font-semibold text-gray-800 mb-2">
+                    Progress Over Time
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    Your journey from {format(new Date(goal.createdAt), 'MMM dd, yyyy')} to {format(new Date(goal.targetDate), 'MMM dd, yyyy')}
+                  </p>
+                </div>
+                
+                {progressLoading ? (
+                  <div className="flex items-center justify-center h-64">
+                    <Loading />
+                  </div>
+                ) : progressHistory.length > 0 ? (
+                  <div className="progress-chart-container">
+                    <Chart
+                      options={getProgressChartOptions()}
+                      series={[{
+                        name: 'Progress',
+                        data: progressHistory.map(item => item.progress)
+                      }]}
+                      type="bar"
+                      height={300}
+                    />
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <ApperIcon name="BarChart3" size={48} className="mx-auto text-gray-400 mb-4" />
+                    <p className="text-gray-600">
+                      Progress data will appear as you work on your habits
+                    </p>
+                  </div>
+                )}
+                
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
+                  <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg">
+                    <div className="text-2xl font-bold text-blue-600">
+                      {differenceInDays(new Date(), new Date(goal.createdAt))}
+                    </div>
+                    <div className="text-sm text-gray-600">Days In</div>
+                  </div>
+                  <div className="text-center p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg">
+                    <div className="text-2xl font-bold text-green-600">
+                      {Math.max(0, differenceInDays(new Date(goal.targetDate), new Date()))}
+                    </div>
+                    <div className="text-sm text-gray-600">Days Left</div>
+                  </div>
+                  <div className="text-center p-4 bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg">
+                    <div className="text-2xl font-bold text-purple-600">
+                      {habits.filter(h => h.currentStreak > 0).length}
+                    </div>
+                    <div className="text-sm text-gray-600">Active Habits</div>
+                  </div>
+                  <div className="text-center p-4 bg-gradient-to-br from-orange-50 to-yellow-50 rounded-lg">
+                    <div className="text-2xl font-bold text-orange-600">
+                      {Math.max(...habits.map(h => h.currentStreak), 0)}
+                    </div>
+                    <div className="text-sm text-gray-600">Best Streak</div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </Card>
         </motion.div>
 
         {/* AI Analysis */}
@@ -181,7 +443,7 @@ const GoalDetail = () => {
           className="mb-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
+          transition={{ delay: 0.2 }}
         >
           <Card>
             <div className="flex items-center space-x-3 mb-4">
@@ -200,12 +462,12 @@ const GoalDetail = () => {
           </Card>
         </motion.div>
 
-        {/* Habits */}
+{/* Habits */}
         <motion.div
           className="mb-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+          transition={{ delay: 0.3 }}
         >
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-display font-bold text-gray-800">
@@ -255,12 +517,12 @@ const GoalDetail = () => {
           )}
         </motion.div>
 
-        {/* Actions */}
+{/* Actions */}
         <motion.div
           className="flex justify-center space-x-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
+          transition={{ delay: 0.4 }}
         >
           {goal.status === 'active' && (
             <Button
