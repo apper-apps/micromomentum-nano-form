@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { motion, PanInfo } from 'framer-motion';
-import { toast } from 'react-toastify';
+import { useState } from 'react'
+import { motion } from 'framer-motion'
+import { toast } from 'react-toastify'
 import ApperIcon from '@/components/ApperIcon';
 import { formatDistanceToNow } from 'date-fns';
 
