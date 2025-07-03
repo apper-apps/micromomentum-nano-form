@@ -102,9 +102,12 @@ const TodayDashboard = () => {
             <div className="text-2xl font-bold text-gray-800">
               {format(new Date(), 'MMM dd')}
             </div>
-            <p className="text-sm text-gray-600">Today's Focus</p>
+<p className="text-sm text-gray-600">Today's Focus</p>
           </Card>
         </motion.div>
+
+        {/* Habit Suggestions */}
+        <HabitSuggestionsSection />
 
         {/* Today's Habits */}
         <div className="space-y-6">
@@ -189,9 +192,96 @@ const TodayDashboard = () => {
             </div>
           )}
         </div>
-      </div>
+</div>
     </div>
   );
 };
 
+const HabitSuggestionsSection = () => {
+  const [suggestions, setSuggestions] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadSuggestions();
+  }, []);
+
+  const loadSuggestions = async () => {
+    try {
+      const { suggestionService } = await import('@/services/api/suggestionService');
+      const data = await suggestionService.generateSuggestions(3);
+      setSuggestions(data);
+    } catch (error) {
+      console.error('Failed to load suggestions:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading || suggestions.length === 0) return null;
+
+  return (
+    <motion.div
+      className="mb-8"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.4 }}
+    >
+      <Card className="bg-gradient-to-br from-primary/5 to-accent/5 border-primary/20">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center">
+              <ApperIcon name="Lightbulb" size={20} className="text-white" />
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-gray-800">
+                Suggested Habits
+              </h3>
+              <p className="text-sm text-gray-600">
+                Personalized recommendations for you
+              </p>
+            </div>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => window.location.href = '/suggestions'}
+            className="text-primary border-primary hover:bg-primary hover:text-white"
+          >
+            <ApperIcon name="ArrowRight" size={16} className="mr-2" />
+            View All
+          </Button>
+        </div>
+        
+        <div className="space-y-3">
+          {suggestions.map((suggestion) => (
+            <div
+              key={suggestion.Id}
+              className="flex items-center space-x-3 p-3 bg-white/50 rounded-lg hover:bg-white/70 transition-colors"
+            >
+              <div className="w-8 h-8 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center flex-shrink-0">
+                <ApperIcon
+                  name={suggestion.iconName || 'Plus'}
+                  size={16}
+                  className="text-white"
+                />
+              </div>
+              <div className="flex-1 min-w-0">
+                <h4 className="font-medium text-gray-800 truncate">
+                  {suggestion.title}
+                </h4>
+                <p className="text-sm text-gray-600 truncate">
+                  {suggestion.description}
+                </p>
+              </div>
+              <div className="flex items-center space-x-2 text-sm text-gray-500">
+                <ApperIcon name="Clock" size={14} />
+                <span>{suggestion.estimatedDuration}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Card>
+    </motion.div>
+  );
+};
 export default TodayDashboard;

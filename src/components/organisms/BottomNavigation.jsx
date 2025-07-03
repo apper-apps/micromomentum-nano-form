@@ -3,9 +3,10 @@ import { motion } from 'framer-motion';
 import ApperIcon from '@/components/ApperIcon';
 
 const BottomNavigation = () => {
-  const navItems = [
+const navItems = [
     { path: '/', icon: 'Home', label: 'Today' },
     { path: '/goals', icon: 'Target', label: 'Goals' },
+    { path: '/suggestions', icon: 'Lightbulb', label: 'Suggestions' },
     { path: '/progress', icon: 'TrendingUp', label: 'Progress' },
     { path: '/profile', icon: 'User', label: 'Profile' },
   ];
