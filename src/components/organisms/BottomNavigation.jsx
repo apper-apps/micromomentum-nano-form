@@ -8,9 +8,9 @@ const navItems = [
     { path: '/goals', icon: 'Target', label: 'Goals' },
     { path: '/suggestions', icon: 'Lightbulb', label: 'Suggestions' },
     { path: '/progress', icon: 'TrendingUp', label: 'Progress' },
+    { path: '/analytics', icon: 'BarChart3', label: 'Analytics' },
     { path: '/profile', icon: 'User', label: 'Profile' },
   ];
-
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-gray-100 z-50">
       <div className="max-w-7xl mx-auto px-4">
