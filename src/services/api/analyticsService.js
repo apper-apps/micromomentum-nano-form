@@ -70,10 +70,19 @@ export const analyticsService = {
     };
   },
 
-  async getStreakAnalysis() {
+async getStreakAnalysis() {
     await delay(300);
     const habits = await habitService.getAll();
     const streakData = getHabitStreakCorrelation(habits);
+    
+    if (!streakData || streakData.length === 0) {
+      return {
+        chartData: [],
+        averageStreak: 0,
+        totalCompletions: 0,
+        topPerformer: null
+      };
+    }
     
     const chartData = streakData.map(habit => ({
       x: habit.completions,
@@ -85,29 +94,38 @@ export const analyticsService = {
     
     return {
       chartData,
-      averageStreak: streakData.reduce((sum, h) => sum + h.current, 0) / streakData.length,
+      averageStreak: Math.round((streakData.reduce((sum, h) => sum + h.current, 0) / streakData.length) * 10) / 10,
       totalCompletions: streakData.reduce((sum, h) => sum + h.completions, 0),
-      topPerformer: streakData[0]
+      topPerformer: streakData[0] || null
     };
   },
 
-  async getCompletionTrendAnalysis() {
+async getCompletionTrendAnalysis() {
     await delay(300);
     const habits = await habitService.getAll();
-    const trends = getCompletionTrends(habits);
+    const trendData = getCompletionTrends(habits);
     
-    const consistencyData = Object.values(trends)
-      .filter(trend => trend.consistency > 0)
+    if (!trendData.trends || !trendData.habitConsistency) {
+      return {
+        trends: [],
+        consistencyRanking: [],
+        averageConsistency: 0
+      };
+    }
+    
+    const consistencyData = trendData.habitConsistency
+      .filter(habit => habit.consistency > 0)
       .sort((a, b) => b.consistency - a.consistency);
     
     return {
-      trends,
+      trends: trendData.trends,
       consistencyRanking: consistencyData,
-      averageConsistency: consistencyData.reduce((sum, t) => sum + t.consistency, 0) / consistencyData.length
+      averageConsistency: consistencyData.length > 0 ? 
+        Math.round(consistencyData.reduce((sum, h) => sum + h.consistency, 0) / consistencyData.length) : 0
     };
   },
 
-  async getHabitClusterAnalysis() {
+async getHabitClusterAnalysis() {
     await delay(300);
     const habits = await habitService.getAll();
     const clusters = getHabitClusters(habits);
@@ -115,10 +133,10 @@ export const analyticsService = {
     return {
       clusters,
       clusterSizes: {
-        highPerformers: clusters.highPerformers.length,
-        consistent: clusters.consistent.length,
-        struggling: clusters.struggling.length,
-        new: clusters.new.length
+        highPerformers: clusters.highPerformers?.length || 0,
+        consistent: clusters.consistent?.length || 0,
+        struggling: clusters.struggling?.length || 0,
+        new: clusters.new?.length || 0
       },
       recommendations: {
         highPerformers: "Consider adding more challenging habits",

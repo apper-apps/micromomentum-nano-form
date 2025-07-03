@@ -256,47 +256,19 @@ export const getTimeOfDayDistribution = (habits) => {
 };
 
 export const getHabitStreakCorrelation = (habits) => {
-  if (!habits || habits.length === 0) return { correlation: 0, insights: [] };
+  if (!habits || habits.length === 0) return [];
   
-  const streakData = habits.map(habit => ({
-    name: habit.name,
-    streak: habit.currentStreak || 0,
-    completionRate: habit.completions ? 
-      getCompletionRate(habit.completions, 30) : 0,
-    timeOfDay: habit.timeOfDay
-  }));
-  
-  // Calculate correlation between streak and completion rate
-  const streaks = streakData.map(h => h.streak);
-  const rates = streakData.map(h => h.completionRate);
-  
-  const correlation = calculateCorrelation(streaks, rates);
-  
-  // Generate insights
-  const insights = [];
-  const avgStreak = streaks.reduce((sum, s) => sum + s, 0) / streaks.length;
-  const avgRate = rates.reduce((sum, r) => sum + r, 0) / rates.length;
-  
-  if (correlation > 0.7) {
-    insights.push("Strong positive correlation between streaks and completion rates");
-  } else if (correlation < -0.3) {
-    insights.push("Habits with longer streaks tend to have lower recent completion rates");
-  }
-  
-  if (avgStreak > 10) {
-    insights.push("High average streak indicates good habit consistency");
-  }
-  
-  return {
-    correlation: Math.round(correlation * 100) / 100,
-    insights,
-    averageStreak: Math.round(avgStreak * 10) / 10,
-    averageCompletionRate: Math.round(avgRate)
-  };
+  return habits.map(habit => ({
+    name: habit.name || 'Unnamed Habit',
+    current: habit.currentStreak || 0,
+    longest: habit.longestStreak || habit.currentStreak || 0,
+    completions: habit.completions ? habit.completions.length : 0,
+    timeOfDay: habit.timeOfDay || 'anytime'
+  })).sort((a, b) => b.current - a.current);
 };
 
 export const getCompletionTrends = (habits, days = 30) => {
-  if (!habits || habits.length === 0) return [];
+  if (!habits || habits.length === 0) return {};
   
   const trends = [];
   const today = new Date();
@@ -314,57 +286,77 @@ export const getCompletionTrends = (habits, days = 30) => {
       }
     });
     
+    const percentage = Math.round((completions / habits.length) * 100);
     trends.push({
       date: date.toLocaleDateString(),
       completions,
-      percentage: Math.round((completions / habits.length) * 100)
+      percentage,
+      consistency: percentage >= 80 ? 'high' : percentage >= 50 ? 'medium' : 'low'
     });
   }
   
-  return trends;
+  // Calculate habit-level consistency
+  const habitConsistency = habits.map(habit => {
+    const recentCompletions = habit.completions ? habit.completions.filter(c => {
+      const completionDate = new Date(c);
+      const daysDiff = Math.floor((today - completionDate) / (1000 * 60 * 60 * 24));
+      return daysDiff <= days;
+    }).length : 0;
+    
+    const consistencyRate = (recentCompletions / days) * 100;
+    return {
+      name: habit.name,
+      consistency: Math.round(consistencyRate)
+    };
+  });
+  
+  return {
+    trends,
+    habitConsistency
+  };
 };
 
 export const getHabitClusters = (habits) => {
-  if (!habits || habits.length === 0) return [];
+  if (!habits || habits.length === 0) return {
+    highPerformers: [],
+    consistent: [],
+    struggling: [],
+    new: []
+  };
   
-  const clusters = {};
+  const clusters = {
+    highPerformers: [],
+    consistent: [],
+    struggling: [],
+    new: []
+  };
   
   habits.forEach(habit => {
-    const key = `${habit.timeOfDay}-${habit.goalId}`;
+    const streak = habit.currentStreak || 0;
+    const completions = habit.completions ? habit.completions.length : 0;
+    const completionRate = completions > 0 ? getCompletionRate(habit.completions, 30) : 0;
     
-    if (!clusters[key]) {
-      clusters[key] = {
-        timeOfDay: habit.timeOfDay,
-        goalId: habit.goalId,
-        habits: [],
-        averageStreak: 0,
-        totalCompletions: 0
-      };
-    }
-    
-    clusters[key].habits.push({
+    const habitData = {
       name: habit.name,
-      streak: habit.currentStreak || 0,
-      completions: habit.completions ? habit.completions.length : 0
-    });
-  });
-  
-  // Calculate cluster statistics
-  Object.values(clusters).forEach(cluster => {
-    const streaks = cluster.habits.map(h => h.streak);
-    const completions = cluster.habits.map(h => h.completions);
+      streak,
+      completions,
+      completionRate,
+      timeOfDay: habit.timeOfDay
+    };
     
-    cluster.averageStreak = streaks.reduce((sum, s) => sum + s, 0) / streaks.length;
-    cluster.totalCompletions = completions.reduce((sum, c) => sum + c, 0);
-    cluster.size = cluster.habits.length;
+    // Categorize based on performance
+    if (streak >= 21 && completionRate >= 80) {
+      clusters.highPerformers.push(habitData);
+    } else if (streak >= 7 && completionRate >= 60) {
+      clusters.consistent.push(habitData);
+    } else if (completions >= 5 && completionRate < 50) {
+      clusters.struggling.push(habitData);
+    } else {
+      clusters.new.push(habitData);
+    }
   });
   
-  return Object.values(clusters)
-    .sort((a, b) => b.size - a.size)
-    .map(cluster => ({
-      ...cluster,
-      averageStreak: Math.round(cluster.averageStreak * 10) / 10
-    }));
+  return clusters;
 };
 
 // Helper function for correlation calculation
